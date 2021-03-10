@@ -3,6 +3,7 @@ import gi
 gi.require_version("Gtk", "3.0")
 
 from gi.repository import GObject, GLib, Gtk, Gio
+import get_media_data
 
 class App(Gtk.Application):
     def __init__(self):
@@ -11,17 +12,34 @@ class App(Gtk.Application):
         GLib.set_prgname('mlv.knrf.canola')
 
     def do_activate(self):
-        window = Gtk.ApplicationWindow(application=self)
-        window.set_icon_name('mlv.knrf.canola')
+        self.window = Gtk.ApplicationWindow(application=self)
+        self.window.set_icon_name('mlv.knrf.canola')
         
-        window.set_titlebar(self.mk_title_bar())
-        window.add(self.mk_switch(self.mk_song_page(),
+        self.window.set_titlebar(self.mk_title_bar())
+        self.window.add(self.mk_switch(self.mk_song_page(),
             self.mk_album_page(),
             self.mk_artist_page()
             ))
         
-        window.set_default_size(1080, 720)
-        window.show_all()
+        self.window.set_default_size(1080, 720)
+        self.window.show_all()
+        self.backend = get_media_data.MediaData()
+        if self.backend.db_utils.db_exist() == False:
+            self.info_box()
+
+    def info_box(self):
+        dialog = Gtk.MessageDialog(
+            transient_for=self.window,
+            flags=0,
+            message_type=Gtk.MessageType.INFO,
+            buttons=Gtk.ButtonsType.OK,
+            text="Database Not Found",
+        )
+        dialog.format_secondary_text(
+            "Please make database."
+        )
+        dialog.run()
+        dialog.destroy()
 
     def mk_title_bar(self):
         header = Gtk.HeaderBar(
@@ -31,14 +49,14 @@ class App(Gtk.Application):
         self.popover = Gtk.Popover()
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         
-        open_btn = Gtk.ModelButton(label="Open")
-        #open_btn.connect("clicked", self.on_open)
+        db_btn = Gtk.ModelButton(label="Make DB")
+        db_btn.connect("clicked", self.on_make_db)
 
         about_btn = Gtk.ModelButton(label="About")
         #about_btn.connect("clicked", self.on_about)
 
 
-        vbox.pack_start(open_btn, False, True, 5)
+        vbox.pack_start(db_btn, False, True, 5)
         vbox.pack_start(about_btn, False, True, 5)
 
         vbox.show_all()
@@ -118,3 +136,22 @@ class App(Gtk.Application):
         scrolledwindow.set_vexpand(True)
         return scrolledwindow
 
+    def on_make_db(self, button):
+        dialog = Gtk.FileChooserDialog(
+            title="Please choose a folder",
+            parent=self.window,
+            action=Gtk.FileChooserAction.SELECT_FOLDER,
+        )
+        dialog.add_buttons(
+            Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, "Select", Gtk.ResponseType.OK
+        )
+        dialog.set_default_size(800, 400)
+
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            filename = dialog.get_filename()
+            dialog.destroy() 
+            self.backend.find_files(filename)
+       
+        elif response == Gtk.ResponseType.CANCEL:
+           dialog.destroy()
