@@ -16,7 +16,7 @@ class MediaData():
             file_data = self.get_data(item)
             if file_data != None:
                 json_list.append(file_data)
-        self.db_utils.write_new_db(json_list)
+        self.db_utils.write_db(json_list)
 
             
     def get_data(self, filepath):
@@ -39,15 +39,15 @@ class MediaData():
         # TODO: add try for key value error
         # add to list of missing tags that have not being added
 
-        song_dict["file_path"] = filepath 
+        song_dict["file_path"] = str(filepath) 
         song_dict["file_type"] = "Mp3"
-        song_dict["title"] = tag["TIT2"]
-        song_dict["artist"] = tag["TPE1"]
-        song_dict["album"] = tag["TALB"]
-        song_dict["year"] = tag["TDRC"]
-        song_dict["track_num"] = tag["TRCK"]
-        song_dict["genres"] = tag["TCON"]
-        song_dict["length"] = data_type.info.length
+        song_dict["title"] = str(tag["TIT2"])
+        song_dict["artist"] = str(tag["TPE1"])
+        song_dict["album"] = str(tag["TALB"])
+        song_dict["year"] = str(tag["TDRC"])
+        song_dict["track_num"] = str(tag["TRCK"])
+        song_dict["genres"] = str(tag["TCON"])
+        song_dict["length"] = str(data_type.info.length)
                 
         if data_type.info.channels == 1:
             song_dict["channels"] = "Mono"
@@ -56,9 +56,9 @@ class MediaData():
         else:
             song_dict["channels"] = "Unknow"
 
-        song_dict["bitrate"] = data_type.info.bitrate
-        song_dict["sample_rate"] = data_type.info.sample_rate
-        song_dict["encoder"] = data_type.info.encoder_info
+        song_dict["bitrate"] = str(data_type.info.bitrate)
+        song_dict["sample_rate"] = str(data_type.info.sample_rate)
+        song_dict["encoder"] = str(data_type.info.encoder_info)
 
         return song_dict
         
@@ -66,15 +66,15 @@ class MediaData():
                # TODO: add try for key value err
                # add to list of missing tags that have not being added
 
-        song_dict["file_path"] = filepath
+        song_dict["file_path"] = str(filepath)
         song_dict["file_type"] = "Flac"
-        song_dict["title"] = tag["TITLE"]
-        song_dict["artist"] = tag["ARTIST"]
-        song_dict["album"] = tag["ALBUM"]
-        song_dict["year"] = tag["DATE"]
-        song_dict["track_num"] = tag["TRACKNUMBER"]
+        song_dict["title"] = str(tag["TITLE"])
+        song_dict["artist"] = str(tag["ARTIST"])
+        song_dict["album"] = str(tag["ALBUM"])
+        song_dict["year"] = str(tag["DATE"])
+        song_dict["track_num"] = str(tag["TRACKNUMBER"])
         song_dict["genres"] = "unknow"
-        song_dict["length"] = data_type.info.length 
+        song_dict["length"] = str(data_type.info.length) 
 
         if data_type.info.channels == 1:
             song_dict["channels"] = "Mono"
@@ -83,8 +83,8 @@ class MediaData():
         else:
             song_dict["channels"] = "Unknow"
 
-        song_dict["bitrate"] = data_type.info.bitrate
-        song_dict["sample_rate"] = data_type.info.sample_rate
+        song_dict["bitrate"] = str(data_type.info.bitrate)
+        song_dict["sample_rate"] = str(data_type.info.sample_rate)
         song_dict["encoder"] = "Flac"
 
         return song_dict

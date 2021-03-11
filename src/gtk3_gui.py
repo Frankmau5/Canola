@@ -26,6 +26,9 @@ class App(Gtk.Application):
         self.backend = get_media_data.MediaData()
         if self.backend.db_utils.db_exist() == False:
             self.info_box()
+        else:
+            store = self.mk_store()
+            # add store to tree view 
 
     def info_box(self):
         dialog = Gtk.MessageDialog(
@@ -101,8 +104,14 @@ class App(Gtk.Application):
         store = Gtk.ListStore()
         self.tree = Gtk.TreeView(model=store)
         
+        column_path = Gtk.TreeViewColumn("File path")
+        self.tree.append_column(column_path)
+        
+        column_type = Gtk.TreeViewColumn("File type")
+        self.tree.append_column(column_type)
+        
         renderer = Gtk.CellRendererText()
-        column = Gtk.TreeViewColumn("Song", renderer, text=0)
+        column = Gtk.TreeViewColumn("Title", renderer, text=2)
         self.tree.append_column(column)
 
         column1 = Gtk.TreeViewColumn("Artist")
@@ -110,16 +119,74 @@ class App(Gtk.Application):
         
         column2 = Gtk.TreeViewColumn("Album")
         self.tree.append_column(column2)
+        
+        column3 = Gtk.TreeViewColumn("Year")
+        self.tree.append_column(column3)
+        
+        column4 = Gtk.TreeViewColumn("Track Number")
+        self.tree.append_column(column4)
+        
+        column5 = Gtk.TreeViewColumn("genre")
+        self.tree.append_column(column5)
+        
+        column6 = Gtk.TreeViewColumn("Time")
+        self.tree.append_column(column6)
+        
+        column7 = Gtk.TreeViewColumn("Channel")
+        self.tree.append_column(column7)
+        
+        column8 = Gtk.TreeViewColumn("Bitrate")
+        self.tree.append_column(column8)
+        
+        column9 = Gtk.TreeViewColumn("Sample rate")
+        self.tree.append_column(column9)
+        
+        column10 = Gtk.TreeViewColumn("encoder")
+        self.tree.append_column(column10)
 
-        song = Gtk.CellRendererText()
+        _path = Gtk.CellRendererText()
+        _type = Gtk.CellRendererText()
+        title = Gtk.CellRendererText()
         artist = Gtk.CellRendererText()
         album = Gtk.CellRendererText()
+        year = Gtk.CellRendererText()
+        track_number = Gtk.CellRendererText()
+        genres = Gtk.CellRendererText()
+        time = Gtk.CellRendererText()
+        channel = Gtk.CellRendererText()
+        bitrate = Gtk.CellRendererText()
+        sample_rate = Gtk.CellRendererText()
+        encoder = Gtk.CellRendererText()
 
-        column.pack_start(song, True)
+        column_path.pack_start(_path, True)
+        column_type.pack_start(_type, True)
+        column.pack_start(title, True)
         column1.pack_start(artist, True)
         column2.pack_start(album,True)
-        column1.add_attribute(artist, "text", 1)
-        column2.add_attribute(album, "text", 2)
+
+        column3.pack_start(year,True)
+        column4.pack_start(track_number,True)
+        column5.pack_start(genres,True)
+        column6.pack_start(time,True)
+        column7.pack_start(channel,True)
+        column8.pack_start(bitrate,True)
+        column9.pack_start(sample_rate,True)
+        column10.pack_start(encoder,True)
+
+
+        column_path.add_attribute(_path, "text", 0)
+        column_type.add_attribute(_type, "text", 1)
+        column1.add_attribute(artist, "text", 3)
+        column2.add_attribute(album, "text", 4)
+        column3.add_attribute(year, "text", 5)
+        column4.add_attribute(track_number, "text", 6)
+        column5.add_attribute(genres, "text", 7)
+        column6.add_attribute(time, "text", 8)
+        column7.add_attribute(channel, "text", 9)
+        column8.add_attribute(bitrate, "text", 10)
+        column9.add_attribute(sample_rate, "text", 11)
+        column10.add_attribute(encoder, "text", 12)
+
 
         scrolledwindow.add(self.tree)
         return scrolledwindow
@@ -135,6 +202,28 @@ class App(Gtk.Application):
         scrolledwindow.set_hexpand(True)
         scrolledwindow.set_vexpand(True)
         return scrolledwindow
+
+    def mk_store(self):
+        data = self.backend.db_utils.load_json()
+        store = Gtk.ListStore(str, str, str, str, str, str, str, str, str, str, str, str, str)
+        print(type(data))
+        for item in data:
+            store.append([item["file_path"],
+                    item["file_type"],
+                    item["title"],
+                    item["artist"],
+                    item["album"],
+                    item["year"],
+                    item["track_num"],
+                    item["genres"],
+                    item["length"],
+                    item["channels"],
+                    item["bitrate"],
+                    item["sample_rate"],
+                    item["encoder"],
+                    ])
+        #add
+        self.tree.set_model(store)
 
     def on_make_db(self, button):
         dialog = Gtk.FileChooserDialog(
@@ -155,3 +244,4 @@ class App(Gtk.Application):
        
         elif response == Gtk.ResponseType.CANCEL:
            dialog.destroy()
+
