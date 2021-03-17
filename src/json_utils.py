@@ -30,7 +30,10 @@ class JsonUtils():
             f.write(data)
 
     def load_json(self):
-        json_obj = None
-        with open(self.db_filepath) as f:
-            json_obj = self.json.load(f)
-        return json_obj
+        if self.db_exist():
+            json_obj = None
+            with open(self.db_filepath) as f:
+                json_obj = self.json.load(f)
+            return json_obj
+        else:
+            return list()

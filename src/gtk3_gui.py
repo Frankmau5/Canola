@@ -4,6 +4,9 @@ gi.require_version("Gtk", "3.0")
 
 from gi.repository import GObject, GLib, Gtk, Gio
 import get_media_data
+import time
+import threading
+
 
 class App(Gtk.Application):
     def __init__(self):
@@ -27,8 +30,7 @@ class App(Gtk.Application):
         if self.backend.db_utils.db_exist() == False:
             self.info_box()
         else:
-            store = self.mk_store()
-            # add store to tree view 
+            self.mk_store()
 
     def info_box(self):
         dialog = Gtk.MessageDialog(
@@ -206,7 +208,6 @@ class App(Gtk.Application):
     def mk_store(self):
         data = self.backend.db_utils.load_json()
         store = Gtk.ListStore(str, str, str, str, str, str, str, str, str, str, str, str, str)
-        print(type(data))
         for item in data:
             store.append([item["file_path"],
                     item["file_type"],
@@ -216,7 +217,7 @@ class App(Gtk.Application):
                     item["year"],
                     item["track_num"],
                     item["genres"],
-                    item["length"],
+                    self.human_readable_time(item["length"]),
                     item["channels"],
                     item["bitrate"],
                     item["sample_rate"],
@@ -240,8 +241,21 @@ class App(Gtk.Application):
         if response == Gtk.ResponseType.OK:
             filename = dialog.get_filename()
             dialog.destroy() 
-            self.backend.find_files(filename)
+            t = threading.Thread(name="db_createing_deamon", daemon=True,
+                    target=self.backend.find_files, args=(filename,))
+            t.start()
+
+            #while t.is_alive():
+               # pass
+            
+           # self.mk_store()
        
         elif response == Gtk.ResponseType.CANCEL:
            dialog.destroy()
 
+
+    def human_readable_time(self, seconds):
+        #TODO: need a try incase str -> float then float -> int fails
+        ty_res = time.gmtime(int(float(seconds)))
+        res = time.strftime("%H:%M:%S", ty_res)
+        return res
