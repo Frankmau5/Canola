@@ -9,12 +9,33 @@ import threading
 
 
 class App(Gtk.Application):
+    """Main object\n
+    GTK3 UI Window"""
     def __init__(self):
         super().__init__(application_id='mlv.knrf.canola')
         GLib.set_application_name('canola')
         GLib.set_prgname('mlv.knrf.canola')
+        
+        self.window = None
+        """The main window""" 
+        self.backend = None
+        """Backend Object """
+        self.popover = None
+        """Popup Menu"""
+        self.switch_stack = None
+        """Stack for a stackswitcher """
+        self.switch_view = None
+        """StackSwitcher """
+        self.tree = None
+        """GTK Treeview """
+        self.t = None
+        """Python Thread used for making database """
 
     def do_activate(self):
+        """Method makes a Window, sets size of window, sets up backend and builds UI\n
+        After setting up backend this object will display a messagebox if no database is found or will load database\n
+        """
+
         self.window = Gtk.ApplicationWindow(application=self)
         self.window.set_icon_name('mlv.knrf.canola')
         
@@ -33,6 +54,8 @@ class App(Gtk.Application):
             self.mk_store()
 
     def info_box(self):
+        """Infobox that display message\n
+        Used for at start of program if no database if found"""
         dialog = Gtk.MessageDialog(
             transient_for=self.window,
             flags=0,
@@ -47,6 +70,8 @@ class App(Gtk.Application):
         dialog.destroy()
 
     def mk_title_bar(self):
+        """Makes GTK3 headerbar\n
+        returns Gtk.HeaderBar"""
         header = Gtk.HeaderBar(
             title='Canola',
             show_close_button=True)
@@ -55,7 +80,7 @@ class App(Gtk.Application):
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         
         db_btn = Gtk.ModelButton(label="Make DB")
-        db_btn.connect("clicked", self.on_make_db)
+        db_btn.connect("clicked", self.on_make_db_cmd)
 
         about_btn = Gtk.ModelButton(label="About")
         #about_btn.connect("clicked", self.on_about)
@@ -76,6 +101,8 @@ class App(Gtk.Application):
         return header
 
     def mk_switch(self, song_page, album_page, artist_page):
+        """Makes GTK3 StackSwitcher and Stack then adds them to Gtk Box \n
+        returns Gtk Box"""
         vbox = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing = 5) 
 
         #Start of switch view
@@ -99,6 +126,8 @@ class App(Gtk.Application):
         return vbox
 
     def mk_song_page(self):
+        """Makes UI for songs page on the stackswitcher\n
+        returns GTK ScrolledWindow"""
         scrolledwindow = Gtk.ScrolledWindow()
         scrolledwindow.set_hexpand(True)
         scrolledwindow.set_vexpand(True)
@@ -194,18 +223,25 @@ class App(Gtk.Application):
         return scrolledwindow
 
     def mk_album_page(self):
+        """Makes UI for album page on the stackswitcher\n
+        returns GTK ScrolledWindow"""
         scrolledwindow = Gtk.ScrolledWindow()
         scrolledwindow.set_hexpand(True)
         scrolledwindow.set_vexpand(True)
         return scrolledwindow
 
     def mk_artist_page(self):
+        """Makes UI for album page on the stackswitcher\n
+        returns GTK ScrolledWindow"""
+
         scrolledwindow = Gtk.ScrolledWindow()
         scrolledwindow.set_hexpand(True)
         scrolledwindow.set_vexpand(True)
         return scrolledwindow
 
     def mk_store(self):
+        """Make a store and add it to tree\n
+        Gets data from backend and  json_utils"""
         data = self.backend.db_utils.load_json()
         store = Gtk.ListStore(str, str, str, str, str, str, str, str, str, str, str, str, str)
         for item in data:
@@ -223,10 +259,19 @@ class App(Gtk.Application):
                     item["sample_rate"],
                     item["encoder"],
                     ])
-        #add
         self.tree.set_model(store)
 
-    def on_make_db(self, button):
+    def on_make_db_cmd(self, button):
+        """Event handler for make database command\n
+        calls inner method __update_display_and_mkdb() and start a load dialog
+        NOTE: might change the dialog with a messagebox"""
+        self._update_display_and_mkdb(self._get_filepath_for_open())
+        self.load_dialog = LoadDialog(self)
+        response = self.load_dialog.run()
+
+    def _get_filepath_for_open(self):
+        """Dispay Gtk.FileChooserDialog and get filepath\n
+        return str"""
         dialog = Gtk.FileChooserDialog(
             title="Please choose a folder",
             parent=self.window,
@@ -241,21 +286,46 @@ class App(Gtk.Application):
         if response == Gtk.ResponseType.OK:
             filename = dialog.get_filename()
             dialog.destroy() 
-            t = threading.Thread(name="db_createing_deamon", daemon=True,
-                    target=self.backend.find_files, args=(filename,))
-            t.start()
-
-            #while t.is_alive():
-               # pass
+            return filename
             
-           # self.mk_store()
        
         elif response == Gtk.ResponseType.CANCEL:
            dialog.destroy()
+         
+    def _update_display_and_mkdb(self, filename):
+            """Starts thread to create database and starts a timeout every second """
+            self.t = threading.Thread(name="db_createing_deamon", daemon=True,
+                    target=self.backend.find_files, args=(filename,))
+            
+            self.t.start()
+            GObject.timeout_add(1000,self.update_callback, self)
 
-
+    def update_callback(self, timer):
+        """Callback for timer used to see when thread is done\n
+        check is Thread is alive is so then adds a new timeout for a second or \n
+        call mk_store to update UI then it destroys load dialog"""
+        if self.t.is_alive():
+            GObject.timeout_add(1000,self.update_callback, self) 
+        else:
+            self.mk_store()
+            self.load_dialog.destroy() 
+    
     def human_readable_time(self, seconds):
         #TODO: need a try incase str -> float then float -> int fails
+        """Helper method to change seconds into human readable time\n
+        returns time str time.strftime()"""
         ty_res = time.gmtime(int(float(seconds)))
         res = time.strftime("%H:%M:%S", ty_res)
         return res
+
+class LoadDialog(Gtk.Dialog):
+    """change to message box ??? """
+    def __init__(self, parent):
+        Gtk.Dialog.__init__(self, title="Making Database", flags=0)
+        self.set_default_size(250, 100)
+
+        label = Gtk.Label(label="Database is being made.")
+        box = self.get_content_area()
+        box.add(label)
+        
+        self.show_all()
