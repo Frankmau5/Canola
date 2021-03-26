@@ -27,17 +27,117 @@ class QuestionDialog(Gtk.Dialog):
         self.show_all()
 
 class EditDialog(Gtk.Dialog):
-    def __init__(self, parent):
+    def __init__(self, parent, combo_data, row_data, mulit=False):
         Gtk.Dialog.__init__(self, title="Edit data", flags=0)
         self.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK, Gtk.ResponseType.OK)
         self.set_default_size(800,600)
+        self.combo_data = combo_data
+        self.row_data = row_data
+        self.mk_store(combo_data[0]) 
         
-        box =self.get_content_area()
-        box.add(self.Mk_Ui())
+        box = self.get_content_area()
+        if mulit:
+            box.add(self.Mk_Ui(mulit=True))
+        else:
+            box.add(self.Mk_Ui())
         self.show_all()
 
-    def Mk_Ui(self):
-        return Gtk.Label(label="hello edit dialog")
+    def Mk_Ui(self, mulit= False):
+        main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        title_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        artist_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        album_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        year_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        track_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        genres_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+       
+        self.data_store = Gtk.ListStore(str)
+
+        title_label = Gtk.Label(label="Title")
+        title_box.pack_start(title_label, True, True, 5)
+        self.title_combo = Gtk.ComboBox.new_with_entry()
+        self.title_combo.set_entry_text_column(1)
+        title_box.pack_start(self.title_combo, False, False, 0)
+        self.title_combo.get_child().set_text(self.row_data["title"]) 
+
+        if mulit:
+            self.title_combo.get_child().set_text("")
+
+        artist_label = Gtk.Label(label="Artist")
+        artist_box.pack_start(artist_label, True, True, 5)
+        self.artist_combo = Gtk.ComboBox.new_with_model_and_entry(self.mk_store(self.combo_data[0]))
+        self.artist_combo.connect("changed", self.on_name_combo_changed)
+        self.artist_combo.get_child().set_text(self.row_data["artist"])
+        artist_text = Gtk.CellRendererText()
+        artist_text.set_property("text", "Hello")
+        self.artist_combo.pack_start(artist_text, True)
+        self.artist_combo.add_attribute(artist_text, "text", 0)
+        artist_box.pack_start(self.artist_combo, False, False, 0) 
+
+        album_label = Gtk.Label(label="Album")
+        album_box.pack_start(album_label, True, True, 5)
+        self.album_combo = Gtk.ComboBox.new_with_model_and_entry(self.mk_store(self.combo_data[1]))
+        self.album_combo.connect("changed", self.on_name_combo_changed) 
+        self.album_combo.get_child().set_text(self.row_data["album"])
+        album_text = Gtk.CellRendererText()
+        self.album_combo.pack_start(album_text, True)
+        self.album_combo.add_attribute(album_text, "text", 0)
+        album_box.pack_start(self.album_combo, False, False, 0) 
+
+        year_label = Gtk.Label(label="Year")
+        year_box.pack_start(year_label, True, True, 5)
+        self.year_combo = Gtk.ComboBox.new_with_model_and_entry(self.mk_store(self.combo_data[2]))
+        self.year_combo.connect("changed", self.on_name_combo_changed) 
+        self.year_combo.get_child().set_text(self.row_data["year"])
+        year_text = Gtk.CellRendererText()
+        self.year_combo.pack_start(year_text, True)
+        self.year_combo.add_attribute(year_text, "text", 0)
+        year_box.pack_start(self.year_combo, False, False, 0) 
+
+        track_label = Gtk.Label(label="Track")
+        track_box.pack_start(track_label, True, True, 5)
+        self.track_combo = Gtk.ComboBox.new_with_model_and_entry(self.mk_store(self.combo_data[3]))
+        self.track_combo.connect("changed", self.on_name_combo_changed) 
+        self.track_combo.get_child().set_text(self.row_data["track_num"])
+        track_text = Gtk.CellRendererText()
+        self.track_combo.pack_start(track_text, True)
+        self.track_combo.add_attribute(track_text, "text", 0)
+        track_box.pack_start(self.track_combo, False, False, 0) 
+
+        genres_label = Gtk.Label(label="Genres")
+        genres_box.pack_start(genres_label, True, True, 5)
+        self.genres_combo = Gtk.ComboBox.new_with_model_and_entry(self.mk_store(self.combo_data[4]))
+        self.genres_combo.connect("changed", self.on_name_combo_changed) 
+        self.genres_combo.get_child().set_text(self.row_data["genres"])
+        genres_text = Gtk.CellRendererText()
+        self.genres_combo.pack_start(genres_text, True)
+        self.genres_combo.add_attribute(genres_text, "text", 0)
+        genres_box.pack_start(self.genres_combo, False, False, 0) 
+
+        main_box.pack_start(title_box, True, True, 5)
+        main_box.pack_start(artist_box, True, True, 5)
+        main_box.pack_start(album_box, True, True, 5)
+        main_box.pack_start(year_box, True, True, 5)
+        main_box.pack_start(track_box, True, True, 5)
+        main_box.pack_start(genres_box, True, True, 5)
+
+        return main_box
+
+    def mk_store(self,data):
+        data_list = sorted(data)
+        store = Gtk.ListStore(str)
+        for item in data_list:
+            store.append([item])
+        return store
+
+    def on_name_combo_changed(self, combo):
+        tree_iter = combo.get_active_iter()
+        if tree_iter is not None:
+            model = combo.get_model()
+            name = model[tree_iter][:2]
+            combo.get_child().set_text(name[0])
+        else:
+            entry = combo.get_child()
 
 class App(Gtk.Application):
     """Main object\n
@@ -87,6 +187,7 @@ class App(Gtk.Application):
             self.info_box()
         else:
             self.mk_store()
+
     
     def info_box(self):
         """Infobox that display a message\n
@@ -371,11 +472,37 @@ class App(Gtk.Application):
                 edit_row["genres"] = model.get_value(text_iter,6) 
                 
         if count > 1:
-            pass # show muitl dialog
-        else:
-            edit_dialog = EditDialog(self)
+            edit_dialog = EditDialog(self, self.get_edit_dialog_data(), edit_row, mulit=True)
             edit_dialog.run()
             edit_dialog.destroy()
+        else:
+            edit_dialog = EditDialog(self, self.get_edit_dialog_data(), edit_row)
+            edit_dialog.run()
+            
+            data_dict = dict()
+            data_dict["title"] = edit_dialog.title_combo.get_child().get_text()
+            data_dict["artist"] = edit_dialog.artist_combo.get_child().get_text()
+            data_dict["album"] = edit_dialog.album_combo.get_child().get_text()
+            data_dict["track"] = edit_dialog.track_combo.get_child().get_text()
+            data_dict["year"] = edit_dialog.year_combo.get_child().get_text()
+            data_dict["genres"] = edit_dialog.genres_combo.get_child().get_text()
+            
+            #change to thread
+            self.edit_file_row_data(data_dict, edit_row)
+            edit_dialog.destroy()
+
+    def edit_file_row_data(self, data, old_data):
+        """get data from dialog then changes tag and row data """
+        for row in self.database:
+            if row["title"] == old_data["title"] and row["artist"] == old_data["artist"]:
+                file_path = row["file_path"]
+                row.update(data)
+                print(file_path)
+                self.backend.change_tag(file_path, data)                
+                self.need_to_save = True
+                self.mk_store()
+                break
+
     def get_edit_dialog_data(self):
         """get a set of artist, album, year, track, genres for self.database\n
         resturns set as a tuple"""
@@ -429,6 +556,7 @@ class App(Gtk.Application):
                     self.database.remove(row)
         self.need_to_save = True
         self.mk_store()
+
     def on_make_db_cmd(self, button):
         """Event handler for make database menu item\n
         calls inner method __update_display_and_mkdb() and start a load dialog
@@ -457,6 +585,7 @@ class App(Gtk.Application):
     def _delete_database(self):
         try:
            pathlib.Path(self.backend.db_utils.db_filepath).unlink()
+           self.database.clear()
            self.mk_store()
         except FileNotFoundError as file_error:
             print("Error")

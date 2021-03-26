@@ -23,7 +23,34 @@ class MediaData():
             file_data = self.get_data(item)
             if file_data is not None:
                 json_list.append(file_data)
+        
         self.db_utils.write_db(json_list)
+
+    def change_tag(self, file_path, data):
+        """Changes tag data """
+        filepath = pathlib.Path(file_path)
+
+        if filepath.is_file():
+            try:
+                data_type = mutagen.File(filepath)
+            except mutagen.mp3.HeaderNotFoundError as hnf:
+                pass
+            if isinstance(data_type ,mutagen.mp3.MP3):
+                audio = mutagen.easyid3.EasyID3(filepath)
+                audio["title"] = data["title"]
+                audio["artist"] = data["artist"]
+                audio["album"] = data["album"]
+                audio["tracknumber"] = data["track"]
+                audio["Date"] = data["year"]
+                audio.save()
+            if isinstance(data_type, mutagen.flac.FLAC):
+                audio = mutagen.flac.FLAC(file_path)
+                audio["TITLE"] = data["title"]
+                audio["ARTIST"] = data["artist"]
+                audio["ALBUM"] = data["album"]
+                audio["TRACKNUMBER"] = data["track"]
+                audio["DATE"] = data["year"]
+                audio.save() 
 
     def get_data(self, filepath):
         """Get metadata from file (e.g media tag and file metadata)\n
@@ -35,8 +62,6 @@ class MediaData():
             try:
                 data_type = mutagen.File(filepath)
             except mutagen.mp3.HeaderNotFoundError as hnf:
-                ic(filepath)
-                ic(str(hnf))
                 self.damage_files.append(filepath)
             if isinstance(data_type ,mutagen.mp3.MP3):
                 tag = data_type.tags
@@ -105,7 +130,6 @@ class MediaData():
             song_dict["bitrate"] = str(data_type.info.bitrate)
             song_dict["sample_rate"] = str(data_type.info.sample_rate)
             song_dict["filesize"] = str(pathlib.Path(filepath).stat().st_size)
-
             return song_dict
         except KeyError as kerror:
             ic(str(filepath))
@@ -125,30 +149,30 @@ class MediaData():
         song_dict["file_path"] = str(filepath)
         song_dict["file_type"] = "Flac"
 
-        if "TITLE" in keys and tag["TITLE"] is not None:
+        if "title" in keys and tag["TITLE"] is not None:
             song_dict["title"] = clean_flac_tag(str(tag["TITLE"]))
         else:
             self.data_missing.append(filepath) 
             return None 
         
-        if "ARTIST" in keys and tag["ARTIST"] is not None:
+        if "artist" in keys and tag["ARTIST"] is not None:
             song_dict["artist"] = clean_flac_tag(str(tag["ARTIST"]))
         else:
             self.data_missing.append(filepath) 
             return None 
         
-        if "ALBUM" in keys and tag["ALBUM"] is not None:
+        if "album" in keys and tag["ALBUM"] is not None:
             song_dict["album"] = clean_flac_tag(str(tag["ALBUM"]))
         else:
             self.data_missing.append(filepath) 
             return None 
         
-        if "DATE" in keys and tag["DATE"] is not None:
+        if "date" in keys and tag["DATE"] is not None:
             song_dict["year"] = clean_flac_tag(str(tag["DATE"]))
         else:
             song_dict["year"] = "Unknow" 
 
-        if "TRACKNUMBER" in keys and tag["TRACKNUMBER"] is not None:
+        if "tracknumber" in keys and tag["TRACKNUMBER"] is not None:
             song_dict["track_num"] = clean_flac_tag(str(tag["TRACKNUMBER"]))
         else:
             song_dict["track_num"] = "Unknow" 
@@ -165,7 +189,6 @@ class MediaData():
         song_dict["bitrate"] = str(data_type.info.bitrate)
         song_dict["sample_rate"] = str(data_type.info.sample_rate)
         song_dict["filesize"] = str(pathlib.Path(filepath).stat().st_size)
-        
         return song_dict
 
 def clean_flac_tag(tag):
