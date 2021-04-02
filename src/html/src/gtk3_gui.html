@@ -1,0 +1,1209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>src.gtk3_gui API documentation</title>
+<meta name="description" content="Gtk3 UI" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.gtk3_gui</code></h1>
+</header>
+<section id="section-intro">
+<p>Gtk3 UI</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;Gtk3 UI &#34;&#34;&#34;
+
+import time as time_lib
+import threading 
+import gi
+gi.require_version(&#34;Gtk&#34;, &#34;3.0&#34;)
+from gi.repository import GObject, GLib, Gtk, Gio
+import get_media_data
+
+
+class App(Gtk.Application):
+    &#34;&#34;&#34;Main object\n
+    GTK3 UI Window&#34;&#34;&#34;
+    def __init__(self):
+        super().__init__(application_id=&#39;mlv.knrf.canola&#39;)
+        GLib.set_application_name(&#39;canola&#39;)
+        GLib.set_prgname(&#39;mlv.knrf.canola&#39;)
+        
+        self.window = None
+        &#34;&#34;&#34;The main window&#34;&#34;&#34; 
+        self.backend = None
+        &#34;&#34;&#34;Backend Object &#34;&#34;&#34;
+        self.popover = None
+        &#34;&#34;&#34;Popup Menu&#34;&#34;&#34;
+        self.switch_stack = None
+        &#34;&#34;&#34;Stack for a stackswitcher &#34;&#34;&#34;
+        self.switch_view = None
+        &#34;&#34;&#34;StackSwitcher &#34;&#34;&#34;
+        self.tree = None
+        &#34;&#34;&#34;GTK Treeview &#34;&#34;&#34;
+        self.worker_thread = None
+        &#34;&#34;&#34;Python Thread used for making database &#34;&#34;&#34;
+
+    def do_activate(self):
+        &#34;&#34;&#34;Method makes a Window, sets size of window, sets up backend and builds UI\n
+        After setting up backend this object will display a messagebox if no database is found or will load database\n
+        &#34;&#34;&#34;
+
+        self.window = Gtk.ApplicationWindow(application=self)
+        self.window.set_icon_name(&#39;mlv.knrf.canola&#39;)
+        
+        self.window.set_titlebar(self.mk_title_bar())
+        self.window.add(self.mk_switch(self.mk_song_page(),
+            self.mk_album_page(),
+            self.mk_artist_page()
+            ))
+        
+        self.window.set_default_size(1080, 720)
+        self.window.show_all()
+        self.backend = get_media_data.MediaData()
+        if  self.backend.db_utils.db_exist() is not True:
+            self.info_box()
+        else:
+            self.mk_store()
+
+    def info_box(self):
+        &#34;&#34;&#34;Infobox that display message\n
+        Used for at start of program if no database if found&#34;&#34;&#34;
+        dialog = Gtk.MessageDialog(
+            transient_for=self.window,
+            flags=0,
+            message_type=Gtk.MessageType.INFO,
+            buttons=Gtk.ButtonsType.OK,
+            text=&#34;Database Not Found&#34;,
+        )
+        dialog.format_secondary_text(
+            &#34;Please make database.&#34;
+        )
+        dialog.run()
+        dialog.destroy()
+
+    def mk_title_bar(self):
+        &#34;&#34;&#34;Makes GTK3 headerbar\n
+        returns Gtk.HeaderBar&#34;&#34;&#34;
+        header = Gtk.HeaderBar(
+            title=&#39;Canola&#39;,
+            show_close_button=True)
+
+        self.popover = Gtk.Popover()
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        
+        db_btn = Gtk.ModelButton(label=&#34;Make DB&#34;)
+        db_btn.connect(&#34;clicked&#34;, self.on_make_db_cmd)
+
+        about_btn = Gtk.ModelButton(label=&#34;About&#34;)
+        #about_btn.connect(&#34;clicked&#34;, self.on_about)
+
+
+        vbox.pack_start(db_btn, False, True, 5)
+        vbox.pack_start(about_btn, False, True, 5)
+
+        vbox.show_all()
+        self.popover.add(vbox)
+        self.popover.set_position(Gtk.PositionType.BOTTOM)
+
+        btn = Gtk.MenuButton(popover=self.popover)
+        icon = Gio.ThemedIcon(name=&#34;preferences-system-symbolic&#34;)
+        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+        btn.add(image)
+        header.add(btn)
+        return header
+
+    def mk_switch(self, song_page, album_page, artist_page):
+        &#34;&#34;&#34;Makes GTK3 StackSwitcher and Stack then adds them to Gtk Box \n
+        returns Gtk Box&#34;&#34;&#34;
+        vbox = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing = 5) 
+
+        #Start of switch view
+        self.switch_view = Gtk.StackSwitcher()
+        self.switch_stack = Gtk.Stack()
+        self.switch_view.set_halign(Gtk.Align.CENTER)
+
+        self.switch_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT) 
+        self.switch_stack.set_transition_duration(1000) 
+
+        self.switch_stack.add_titled(song_page, &#34;Songs&#34;, &#34;Songs&#34;)
+        self.switch_stack.add_titled(album_page, &#34;Albums&#34;, &#34;Albums&#34;)
+        self.switch_stack.add_titled(artist_page, &#34;Artists&#34;, &#34;Artists&#34;)
+
+        self.switch_stack.show()
+        self.switch_view.show()
+        
+        self.switch_view.set_stack(self.switch_stack)
+        vbox.pack_start(self.switch_view,False,True,10)
+        vbox.pack_start(self.switch_stack,False,True,10)
+        return vbox
+
+    def mk_song_page(self):
+        &#34;&#34;&#34;Makes UI for songs page on the stackswitcher\n
+        returns GTK ScrolledWindow&#34;&#34;&#34;
+        scrolledwindow = Gtk.ScrolledWindow()
+        scrolledwindow.set_hexpand(True)
+        scrolledwindow.set_vexpand(True)
+        
+        store = Gtk.ListStore()
+        self.tree = Gtk.TreeView(model=store)
+        
+        column_path = Gtk.TreeViewColumn(&#34;File path&#34;)
+        self.tree.append_column(column_path)
+        
+        column_type = Gtk.TreeViewColumn(&#34;File type&#34;)
+        self.tree.append_column(column_type)
+        
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn(&#34;Title&#34;, renderer, text=2)
+        self.tree.append_column(column)
+
+        column1 = Gtk.TreeViewColumn(&#34;Artist&#34;)
+        self.tree.append_column(column1)
+        
+        column2 = Gtk.TreeViewColumn(&#34;Album&#34;)
+        self.tree.append_column(column2)
+        
+        column3 = Gtk.TreeViewColumn(&#34;Year&#34;)
+        self.tree.append_column(column3)
+        
+        column4 = Gtk.TreeViewColumn(&#34;Track Number&#34;)
+        self.tree.append_column(column4)
+        
+        column5 = Gtk.TreeViewColumn(&#34;genre&#34;)
+        self.tree.append_column(column5)
+        
+        column6 = Gtk.TreeViewColumn(&#34;Time&#34;)
+        self.tree.append_column(column6)
+        
+        column7 = Gtk.TreeViewColumn(&#34;Channel&#34;)
+        self.tree.append_column(column7)
+        
+        column8 = Gtk.TreeViewColumn(&#34;Bitrate&#34;)
+        self.tree.append_column(column8)
+        
+        column9 = Gtk.TreeViewColumn(&#34;Sample rate&#34;)
+        self.tree.append_column(column9)
+        
+        column10 = Gtk.TreeViewColumn(&#34;encoder&#34;)
+        self.tree.append_column(column10)
+
+        _path = Gtk.CellRendererText()
+        _type = Gtk.CellRendererText()
+        title = Gtk.CellRendererText()
+        artist = Gtk.CellRendererText()
+        album = Gtk.CellRendererText()
+        year = Gtk.CellRendererText()
+        track_number = Gtk.CellRendererText()
+        genres = Gtk.CellRendererText()
+        time = Gtk.CellRendererText()
+        channel = Gtk.CellRendererText()
+        bitrate = Gtk.CellRendererText()
+        sample_rate = Gtk.CellRendererText()
+        encoder = Gtk.CellRendererText()
+
+        column_path.pack_start(_path, True)
+        column_type.pack_start(_type, True)
+        column.pack_start(title, True)
+        column1.pack_start(artist, True)
+        column2.pack_start(album,True)
+
+        column3.pack_start(year,True)
+        column4.pack_start(track_number,True)
+        column5.pack_start(genres,True)
+        column6.pack_start(time,True)
+        column7.pack_start(channel,True)
+        column8.pack_start(bitrate,True)
+        column9.pack_start(sample_rate,True)
+        column10.pack_start(encoder,True)
+
+
+        column_path.add_attribute(_path, &#34;text&#34;, 0)
+        column_type.add_attribute(_type, &#34;text&#34;, 1)
+        column1.add_attribute(artist, &#34;text&#34;, 3)
+        column2.add_attribute(album, &#34;text&#34;, 4)
+        column3.add_attribute(year, &#34;text&#34;, 5)
+        column4.add_attribute(track_number, &#34;text&#34;, 6)
+        column5.add_attribute(genres, &#34;text&#34;, 7)
+        column6.add_attribute(time, &#34;text&#34;, 8)
+        column7.add_attribute(channel, &#34;text&#34;, 9)
+        column8.add_attribute(bitrate, &#34;text&#34;, 10)
+        column9.add_attribute(sample_rate, &#34;text&#34;, 11)
+        column10.add_attribute(encoder, &#34;text&#34;, 12)
+
+
+        scrolledwindow.add(self.tree)
+        return scrolledwindow
+
+    def mk_album_page(self):
+        &#34;&#34;&#34;Makes UI for album page on the stackswitcher\n
+        returns GTK ScrolledWindow&#34;&#34;&#34;
+        scrolledwindow = Gtk.ScrolledWindow()
+        scrolledwindow.set_hexpand(True)
+        scrolledwindow.set_vexpand(True)
+        return scrolledwindow
+
+    def mk_artist_page(self):
+        &#34;&#34;&#34;Makes UI for album page on the stackswitcher\n
+        returns GTK ScrolledWindow&#34;&#34;&#34;
+
+        scrolledwindow = Gtk.ScrolledWindow()
+        scrolledwindow.set_hexpand(True)
+        scrolledwindow.set_vexpand(True)
+        return scrolledwindow
+
+    def mk_store(self):
+        &#34;&#34;&#34;Make a store and add it to tree\n
+        Gets data from backend and  json_utils&#34;&#34;&#34;
+        data = self.backend.db_utils.load_json()
+        store = Gtk.ListStore(str, str, str, str, str, str, str, str, str, str, str, str, str)
+        for item in data:
+            store.append([item[&#34;file_path&#34;],
+                    item[&#34;file_type&#34;],
+                    item[&#34;title&#34;],
+                    item[&#34;artist&#34;],
+                    item[&#34;album&#34;],
+                    item[&#34;year&#34;],
+                    item[&#34;track_num&#34;],
+                    item[&#34;genres&#34;],
+                    self.human_readable_time(item[&#34;length&#34;]),
+                    item[&#34;channels&#34;],
+                    item[&#34;bitrate&#34;],
+                    item[&#34;sample_rate&#34;],
+                    item[&#34;encoder&#34;],
+                    ])
+        self.tree.set_model(store)
+
+    def on_make_db_cmd(self, button):
+        &#34;&#34;&#34;Event handler for make database command\n
+        calls inner method __update_display_and_mkdb() and start a load dialog
+        NOTE: might change the dialog with a messagebox&#34;&#34;&#34;
+        self._update_display_and_mkdb(self._get_filepath_for_open())
+        self.load_dialog = LoadDialog(self)
+        self.load_dialog.run()
+
+    def _get_filepath_for_open(self):
+        &#34;&#34;&#34;Dispay Gtk.FileChooserDialog and get filepath\n
+        return none (error) or str&#34;&#34;&#34;
+        dialog = Gtk.FileChooserDialog(
+            title=&#34;Please choose a folder&#34;,
+            parent=self.window,
+            action=Gtk.FileChooserAction.SELECT_FOLDER,
+        )
+        dialog.add_buttons(
+            Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, &#34;Select&#34;, Gtk.ResponseType.OK
+        )
+        dialog.set_default_size(800, 400)
+
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            filename = dialog.get_filename()
+            dialog.destroy() 
+            return filename
+        dialog.destroy()
+        return None
+         
+    def _update_display_and_mkdb(self, filename):
+            &#34;&#34;&#34;Starts thread to create database and starts a timeout every second &#34;&#34;&#34;
+            self.worker_thread = threading.Thread(name=&#34;db_createing_deamon&#34;, daemon=True,
+                    target=self.backend.find_files, args=(filename,))
+            
+            self.worker_thread.start()
+            GObject.timeout_add(1000,self.update_callback, self)
+
+    def update_callback(self):
+        &#34;&#34;&#34;Callback for timer used to see when thread is done\n
+        check is Thread is alive is so then adds a new timeout for a second or \n
+        call mk_store to update UI then it destroys load dialog&#34;&#34;&#34;
+        if self.worker_thread.is_alive():
+            GObject.timeout_add(1000,self.update_callback, self) 
+        else:
+            self.mk_store()
+            self.load_dialog.destroy() 
+    
+    def human_readable_time(self, seconds):
+        #TODO: need a try incase str -&gt; float then float -&gt; int fails
+        &#34;&#34;&#34;Helper method to change seconds into human readable time\n
+        returns time str time.strftime()&#34;&#34;&#34;
+        ty_res = time_lib.gmtime(int(float(seconds)))
+        res = time_lib.strftime(&#34;%H:%M:%S&#34;, ty_res)
+        return res
+
+class LoadDialog(Gtk.Dialog):
+    &#34;&#34;&#34;change to message box ??? &#34;&#34;&#34;
+    def __init__(self):
+        Gtk.Dialog.__init__(self, title=&#34;Making Database&#34;, flags=0)
+        self.set_default_size(250, 100)
+
+        label = Gtk.Label(label=&#34;Database is being made.&#34;)
+        box = self.get_content_area()
+        box.add(label)
+        
+        self.show_all()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="src.gtk3_gui.App"><code class="flex name class">
+<span>class <span class="ident">App</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Main object</p>
+<p>GTK3 UI Window</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class App(Gtk.Application):
+    &#34;&#34;&#34;Main object\n
+    GTK3 UI Window&#34;&#34;&#34;
+    def __init__(self):
+        super().__init__(application_id=&#39;mlv.knrf.canola&#39;)
+        GLib.set_application_name(&#39;canola&#39;)
+        GLib.set_prgname(&#39;mlv.knrf.canola&#39;)
+        
+        self.window = None
+        &#34;&#34;&#34;The main window&#34;&#34;&#34; 
+        self.backend = None
+        &#34;&#34;&#34;Backend Object &#34;&#34;&#34;
+        self.popover = None
+        &#34;&#34;&#34;Popup Menu&#34;&#34;&#34;
+        self.switch_stack = None
+        &#34;&#34;&#34;Stack for a stackswitcher &#34;&#34;&#34;
+        self.switch_view = None
+        &#34;&#34;&#34;StackSwitcher &#34;&#34;&#34;
+        self.tree = None
+        &#34;&#34;&#34;GTK Treeview &#34;&#34;&#34;
+        self.worker_thread = None
+        &#34;&#34;&#34;Python Thread used for making database &#34;&#34;&#34;
+
+    def do_activate(self):
+        &#34;&#34;&#34;Method makes a Window, sets size of window, sets up backend and builds UI\n
+        After setting up backend this object will display a messagebox if no database is found or will load database\n
+        &#34;&#34;&#34;
+
+        self.window = Gtk.ApplicationWindow(application=self)
+        self.window.set_icon_name(&#39;mlv.knrf.canola&#39;)
+        
+        self.window.set_titlebar(self.mk_title_bar())
+        self.window.add(self.mk_switch(self.mk_song_page(),
+            self.mk_album_page(),
+            self.mk_artist_page()
+            ))
+        
+        self.window.set_default_size(1080, 720)
+        self.window.show_all()
+        self.backend = get_media_data.MediaData()
+        if  self.backend.db_utils.db_exist() is not True:
+            self.info_box()
+        else:
+            self.mk_store()
+
+    def info_box(self):
+        &#34;&#34;&#34;Infobox that display message\n
+        Used for at start of program if no database if found&#34;&#34;&#34;
+        dialog = Gtk.MessageDialog(
+            transient_for=self.window,
+            flags=0,
+            message_type=Gtk.MessageType.INFO,
+            buttons=Gtk.ButtonsType.OK,
+            text=&#34;Database Not Found&#34;,
+        )
+        dialog.format_secondary_text(
+            &#34;Please make database.&#34;
+        )
+        dialog.run()
+        dialog.destroy()
+
+    def mk_title_bar(self):
+        &#34;&#34;&#34;Makes GTK3 headerbar\n
+        returns Gtk.HeaderBar&#34;&#34;&#34;
+        header = Gtk.HeaderBar(
+            title=&#39;Canola&#39;,
+            show_close_button=True)
+
+        self.popover = Gtk.Popover()
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        
+        db_btn = Gtk.ModelButton(label=&#34;Make DB&#34;)
+        db_btn.connect(&#34;clicked&#34;, self.on_make_db_cmd)
+
+        about_btn = Gtk.ModelButton(label=&#34;About&#34;)
+        #about_btn.connect(&#34;clicked&#34;, self.on_about)
+
+
+        vbox.pack_start(db_btn, False, True, 5)
+        vbox.pack_start(about_btn, False, True, 5)
+
+        vbox.show_all()
+        self.popover.add(vbox)
+        self.popover.set_position(Gtk.PositionType.BOTTOM)
+
+        btn = Gtk.MenuButton(popover=self.popover)
+        icon = Gio.ThemedIcon(name=&#34;preferences-system-symbolic&#34;)
+        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+        btn.add(image)
+        header.add(btn)
+        return header
+
+    def mk_switch(self, song_page, album_page, artist_page):
+        &#34;&#34;&#34;Makes GTK3 StackSwitcher and Stack then adds them to Gtk Box \n
+        returns Gtk Box&#34;&#34;&#34;
+        vbox = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing = 5) 
+
+        #Start of switch view
+        self.switch_view = Gtk.StackSwitcher()
+        self.switch_stack = Gtk.Stack()
+        self.switch_view.set_halign(Gtk.Align.CENTER)
+
+        self.switch_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT) 
+        self.switch_stack.set_transition_duration(1000) 
+
+        self.switch_stack.add_titled(song_page, &#34;Songs&#34;, &#34;Songs&#34;)
+        self.switch_stack.add_titled(album_page, &#34;Albums&#34;, &#34;Albums&#34;)
+        self.switch_stack.add_titled(artist_page, &#34;Artists&#34;, &#34;Artists&#34;)
+
+        self.switch_stack.show()
+        self.switch_view.show()
+        
+        self.switch_view.set_stack(self.switch_stack)
+        vbox.pack_start(self.switch_view,False,True,10)
+        vbox.pack_start(self.switch_stack,False,True,10)
+        return vbox
+
+    def mk_song_page(self):
+        &#34;&#34;&#34;Makes UI for songs page on the stackswitcher\n
+        returns GTK ScrolledWindow&#34;&#34;&#34;
+        scrolledwindow = Gtk.ScrolledWindow()
+        scrolledwindow.set_hexpand(True)
+        scrolledwindow.set_vexpand(True)
+        
+        store = Gtk.ListStore()
+        self.tree = Gtk.TreeView(model=store)
+        
+        column_path = Gtk.TreeViewColumn(&#34;File path&#34;)
+        self.tree.append_column(column_path)
+        
+        column_type = Gtk.TreeViewColumn(&#34;File type&#34;)
+        self.tree.append_column(column_type)
+        
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn(&#34;Title&#34;, renderer, text=2)
+        self.tree.append_column(column)
+
+        column1 = Gtk.TreeViewColumn(&#34;Artist&#34;)
+        self.tree.append_column(column1)
+        
+        column2 = Gtk.TreeViewColumn(&#34;Album&#34;)
+        self.tree.append_column(column2)
+        
+        column3 = Gtk.TreeViewColumn(&#34;Year&#34;)
+        self.tree.append_column(column3)
+        
+        column4 = Gtk.TreeViewColumn(&#34;Track Number&#34;)
+        self.tree.append_column(column4)
+        
+        column5 = Gtk.TreeViewColumn(&#34;genre&#34;)
+        self.tree.append_column(column5)
+        
+        column6 = Gtk.TreeViewColumn(&#34;Time&#34;)
+        self.tree.append_column(column6)
+        
+        column7 = Gtk.TreeViewColumn(&#34;Channel&#34;)
+        self.tree.append_column(column7)
+        
+        column8 = Gtk.TreeViewColumn(&#34;Bitrate&#34;)
+        self.tree.append_column(column8)
+        
+        column9 = Gtk.TreeViewColumn(&#34;Sample rate&#34;)
+        self.tree.append_column(column9)
+        
+        column10 = Gtk.TreeViewColumn(&#34;encoder&#34;)
+        self.tree.append_column(column10)
+
+        _path = Gtk.CellRendererText()
+        _type = Gtk.CellRendererText()
+        title = Gtk.CellRendererText()
+        artist = Gtk.CellRendererText()
+        album = Gtk.CellRendererText()
+        year = Gtk.CellRendererText()
+        track_number = Gtk.CellRendererText()
+        genres = Gtk.CellRendererText()
+        time = Gtk.CellRendererText()
+        channel = Gtk.CellRendererText()
+        bitrate = Gtk.CellRendererText()
+        sample_rate = Gtk.CellRendererText()
+        encoder = Gtk.CellRendererText()
+
+        column_path.pack_start(_path, True)
+        column_type.pack_start(_type, True)
+        column.pack_start(title, True)
+        column1.pack_start(artist, True)
+        column2.pack_start(album,True)
+
+        column3.pack_start(year,True)
+        column4.pack_start(track_number,True)
+        column5.pack_start(genres,True)
+        column6.pack_start(time,True)
+        column7.pack_start(channel,True)
+        column8.pack_start(bitrate,True)
+        column9.pack_start(sample_rate,True)
+        column10.pack_start(encoder,True)
+
+
+        column_path.add_attribute(_path, &#34;text&#34;, 0)
+        column_type.add_attribute(_type, &#34;text&#34;, 1)
+        column1.add_attribute(artist, &#34;text&#34;, 3)
+        column2.add_attribute(album, &#34;text&#34;, 4)
+        column3.add_attribute(year, &#34;text&#34;, 5)
+        column4.add_attribute(track_number, &#34;text&#34;, 6)
+        column5.add_attribute(genres, &#34;text&#34;, 7)
+        column6.add_attribute(time, &#34;text&#34;, 8)
+        column7.add_attribute(channel, &#34;text&#34;, 9)
+        column8.add_attribute(bitrate, &#34;text&#34;, 10)
+        column9.add_attribute(sample_rate, &#34;text&#34;, 11)
+        column10.add_attribute(encoder, &#34;text&#34;, 12)
+
+
+        scrolledwindow.add(self.tree)
+        return scrolledwindow
+
+    def mk_album_page(self):
+        &#34;&#34;&#34;Makes UI for album page on the stackswitcher\n
+        returns GTK ScrolledWindow&#34;&#34;&#34;
+        scrolledwindow = Gtk.ScrolledWindow()
+        scrolledwindow.set_hexpand(True)
+        scrolledwindow.set_vexpand(True)
+        return scrolledwindow
+
+    def mk_artist_page(self):
+        &#34;&#34;&#34;Makes UI for album page on the stackswitcher\n
+        returns GTK ScrolledWindow&#34;&#34;&#34;
+
+        scrolledwindow = Gtk.ScrolledWindow()
+        scrolledwindow.set_hexpand(True)
+        scrolledwindow.set_vexpand(True)
+        return scrolledwindow
+
+    def mk_store(self):
+        &#34;&#34;&#34;Make a store and add it to tree\n
+        Gets data from backend and  json_utils&#34;&#34;&#34;
+        data = self.backend.db_utils.load_json()
+        store = Gtk.ListStore(str, str, str, str, str, str, str, str, str, str, str, str, str)
+        for item in data:
+            store.append([item[&#34;file_path&#34;],
+                    item[&#34;file_type&#34;],
+                    item[&#34;title&#34;],
+                    item[&#34;artist&#34;],
+                    item[&#34;album&#34;],
+                    item[&#34;year&#34;],
+                    item[&#34;track_num&#34;],
+                    item[&#34;genres&#34;],
+                    self.human_readable_time(item[&#34;length&#34;]),
+                    item[&#34;channels&#34;],
+                    item[&#34;bitrate&#34;],
+                    item[&#34;sample_rate&#34;],
+                    item[&#34;encoder&#34;],
+                    ])
+        self.tree.set_model(store)
+
+    def on_make_db_cmd(self, button):
+        &#34;&#34;&#34;Event handler for make database command\n
+        calls inner method __update_display_and_mkdb() and start a load dialog
+        NOTE: might change the dialog with a messagebox&#34;&#34;&#34;
+        self._update_display_and_mkdb(self._get_filepath_for_open())
+        self.load_dialog = LoadDialog(self)
+        self.load_dialog.run()
+
+    def _get_filepath_for_open(self):
+        &#34;&#34;&#34;Dispay Gtk.FileChooserDialog and get filepath\n
+        return none (error) or str&#34;&#34;&#34;
+        dialog = Gtk.FileChooserDialog(
+            title=&#34;Please choose a folder&#34;,
+            parent=self.window,
+            action=Gtk.FileChooserAction.SELECT_FOLDER,
+        )
+        dialog.add_buttons(
+            Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, &#34;Select&#34;, Gtk.ResponseType.OK
+        )
+        dialog.set_default_size(800, 400)
+
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            filename = dialog.get_filename()
+            dialog.destroy() 
+            return filename
+        dialog.destroy()
+        return None
+         
+    def _update_display_and_mkdb(self, filename):
+            &#34;&#34;&#34;Starts thread to create database and starts a timeout every second &#34;&#34;&#34;
+            self.worker_thread = threading.Thread(name=&#34;db_createing_deamon&#34;, daemon=True,
+                    target=self.backend.find_files, args=(filename,))
+            
+            self.worker_thread.start()
+            GObject.timeout_add(1000,self.update_callback, self)
+
+    def update_callback(self):
+        &#34;&#34;&#34;Callback for timer used to see when thread is done\n
+        check is Thread is alive is so then adds a new timeout for a second or \n
+        call mk_store to update UI then it destroys load dialog&#34;&#34;&#34;
+        if self.worker_thread.is_alive():
+            GObject.timeout_add(1000,self.update_callback, self) 
+        else:
+            self.mk_store()
+            self.load_dialog.destroy() 
+    
+    def human_readable_time(self, seconds):
+        #TODO: need a try incase str -&gt; float then float -&gt; int fails
+        &#34;&#34;&#34;Helper method to change seconds into human readable time\n
+        returns time str time.strftime()&#34;&#34;&#34;
+        ty_res = time_lib.gmtime(int(float(seconds)))
+        res = time_lib.strftime(&#34;%H:%M:%S&#34;, ty_res)
+        return res</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>gi.repository.Gtk.Application</li>
+<li>gi.overrides.Gio.Application</li>
+<li>gi.repository.Gio.Application</li>
+<li>gi.overrides.GObject.Object</li>
+<li>gi.repository.GObject.Object</li>
+<li>gi._gi.GObject</li>
+<li>gi.repository.Gio.ActionGroup</li>
+<li>gi.repository.Gio.ActionMap</li>
+<li>gi.overrides.Gio.ActionMap</li>
+<li>gi.repository.Gio.ActionMap</li>
+<li>gobject.GInterface</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="src.gtk3_gui.App.backend"><code class="name">var <span class="ident">backend</span></code></dt>
+<dd>
+<div class="desc"><p>Backend Object</p></div>
+</dd>
+<dt id="src.gtk3_gui.App.popover"><code class="name">var <span class="ident">popover</span></code></dt>
+<dd>
+<div class="desc"><p>Popup Menu</p></div>
+</dd>
+<dt id="src.gtk3_gui.App.switch_stack"><code class="name">var <span class="ident">switch_stack</span></code></dt>
+<dd>
+<div class="desc"><p>Stack for a stackswitcher</p></div>
+</dd>
+<dt id="src.gtk3_gui.App.switch_view"><code class="name">var <span class="ident">switch_view</span></code></dt>
+<dd>
+<div class="desc"><p>StackSwitcher</p></div>
+</dd>
+<dt id="src.gtk3_gui.App.tree"><code class="name">var <span class="ident">tree</span></code></dt>
+<dd>
+<div class="desc"><p>GTK Treeview</p></div>
+</dd>
+<dt id="src.gtk3_gui.App.window"><code class="name">var <span class="ident">window</span></code></dt>
+<dd>
+<div class="desc"><p>The main window</p></div>
+</dd>
+<dt id="src.gtk3_gui.App.worker_thread"><code class="name">var <span class="ident">worker_thread</span></code></dt>
+<dd>
+<div class="desc"><p>Python Thread used for making database</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="src.gtk3_gui.App.do_activate"><code class="name flex">
+<span>def <span class="ident">do_activate</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Method makes a Window, sets size of window, sets up backend and builds UI</p>
+<p>After setting up backend this object will display a messagebox if no database is found or will load database</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def do_activate(self):
+    &#34;&#34;&#34;Method makes a Window, sets size of window, sets up backend and builds UI\n
+    After setting up backend this object will display a messagebox if no database is found or will load database\n
+    &#34;&#34;&#34;
+
+    self.window = Gtk.ApplicationWindow(application=self)
+    self.window.set_icon_name(&#39;mlv.knrf.canola&#39;)
+    
+    self.window.set_titlebar(self.mk_title_bar())
+    self.window.add(self.mk_switch(self.mk_song_page(),
+        self.mk_album_page(),
+        self.mk_artist_page()
+        ))
+    
+    self.window.set_default_size(1080, 720)
+    self.window.show_all()
+    self.backend = get_media_data.MediaData()
+    if  self.backend.db_utils.db_exist() is not True:
+        self.info_box()
+    else:
+        self.mk_store()</code></pre>
+</details>
+</dd>
+<dt id="src.gtk3_gui.App.human_readable_time"><code class="name flex">
+<span>def <span class="ident">human_readable_time</span></span>(<span>self, seconds)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Helper method to change seconds into human readable time</p>
+<p>returns time str time.strftime()</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def human_readable_time(self, seconds):
+    #TODO: need a try incase str -&gt; float then float -&gt; int fails
+    &#34;&#34;&#34;Helper method to change seconds into human readable time\n
+    returns time str time.strftime()&#34;&#34;&#34;
+    ty_res = time_lib.gmtime(int(float(seconds)))
+    res = time_lib.strftime(&#34;%H:%M:%S&#34;, ty_res)
+    return res</code></pre>
+</details>
+</dd>
+<dt id="src.gtk3_gui.App.info_box"><code class="name flex">
+<span>def <span class="ident">info_box</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Infobox that display message</p>
+<p>Used for at start of program if no database if found</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def info_box(self):
+    &#34;&#34;&#34;Infobox that display message\n
+    Used for at start of program if no database if found&#34;&#34;&#34;
+    dialog = Gtk.MessageDialog(
+        transient_for=self.window,
+        flags=0,
+        message_type=Gtk.MessageType.INFO,
+        buttons=Gtk.ButtonsType.OK,
+        text=&#34;Database Not Found&#34;,
+    )
+    dialog.format_secondary_text(
+        &#34;Please make database.&#34;
+    )
+    dialog.run()
+    dialog.destroy()</code></pre>
+</details>
+</dd>
+<dt id="src.gtk3_gui.App.mk_album_page"><code class="name flex">
+<span>def <span class="ident">mk_album_page</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Makes UI for album page on the stackswitcher</p>
+<p>returns GTK ScrolledWindow</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def mk_album_page(self):
+    &#34;&#34;&#34;Makes UI for album page on the stackswitcher\n
+    returns GTK ScrolledWindow&#34;&#34;&#34;
+    scrolledwindow = Gtk.ScrolledWindow()
+    scrolledwindow.set_hexpand(True)
+    scrolledwindow.set_vexpand(True)
+    return scrolledwindow</code></pre>
+</details>
+</dd>
+<dt id="src.gtk3_gui.App.mk_artist_page"><code class="name flex">
+<span>def <span class="ident">mk_artist_page</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Makes UI for album page on the stackswitcher</p>
+<p>returns GTK ScrolledWindow</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def mk_artist_page(self):
+    &#34;&#34;&#34;Makes UI for album page on the stackswitcher\n
+    returns GTK ScrolledWindow&#34;&#34;&#34;
+
+    scrolledwindow = Gtk.ScrolledWindow()
+    scrolledwindow.set_hexpand(True)
+    scrolledwindow.set_vexpand(True)
+    return scrolledwindow</code></pre>
+</details>
+</dd>
+<dt id="src.gtk3_gui.App.mk_song_page"><code class="name flex">
+<span>def <span class="ident">mk_song_page</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Makes UI for songs page on the stackswitcher</p>
+<p>returns GTK ScrolledWindow</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def mk_song_page(self):
+    &#34;&#34;&#34;Makes UI for songs page on the stackswitcher\n
+    returns GTK ScrolledWindow&#34;&#34;&#34;
+    scrolledwindow = Gtk.ScrolledWindow()
+    scrolledwindow.set_hexpand(True)
+    scrolledwindow.set_vexpand(True)
+    
+    store = Gtk.ListStore()
+    self.tree = Gtk.TreeView(model=store)
+    
+    column_path = Gtk.TreeViewColumn(&#34;File path&#34;)
+    self.tree.append_column(column_path)
+    
+    column_type = Gtk.TreeViewColumn(&#34;File type&#34;)
+    self.tree.append_column(column_type)
+    
+    renderer = Gtk.CellRendererText()
+    column = Gtk.TreeViewColumn(&#34;Title&#34;, renderer, text=2)
+    self.tree.append_column(column)
+
+    column1 = Gtk.TreeViewColumn(&#34;Artist&#34;)
+    self.tree.append_column(column1)
+    
+    column2 = Gtk.TreeViewColumn(&#34;Album&#34;)
+    self.tree.append_column(column2)
+    
+    column3 = Gtk.TreeViewColumn(&#34;Year&#34;)
+    self.tree.append_column(column3)
+    
+    column4 = Gtk.TreeViewColumn(&#34;Track Number&#34;)
+    self.tree.append_column(column4)
+    
+    column5 = Gtk.TreeViewColumn(&#34;genre&#34;)
+    self.tree.append_column(column5)
+    
+    column6 = Gtk.TreeViewColumn(&#34;Time&#34;)
+    self.tree.append_column(column6)
+    
+    column7 = Gtk.TreeViewColumn(&#34;Channel&#34;)
+    self.tree.append_column(column7)
+    
+    column8 = Gtk.TreeViewColumn(&#34;Bitrate&#34;)
+    self.tree.append_column(column8)
+    
+    column9 = Gtk.TreeViewColumn(&#34;Sample rate&#34;)
+    self.tree.append_column(column9)
+    
+    column10 = Gtk.TreeViewColumn(&#34;encoder&#34;)
+    self.tree.append_column(column10)
+
+    _path = Gtk.CellRendererText()
+    _type = Gtk.CellRendererText()
+    title = Gtk.CellRendererText()
+    artist = Gtk.CellRendererText()
+    album = Gtk.CellRendererText()
+    year = Gtk.CellRendererText()
+    track_number = Gtk.CellRendererText()
+    genres = Gtk.CellRendererText()
+    time = Gtk.CellRendererText()
+    channel = Gtk.CellRendererText()
+    bitrate = Gtk.CellRendererText()
+    sample_rate = Gtk.CellRendererText()
+    encoder = Gtk.CellRendererText()
+
+    column_path.pack_start(_path, True)
+    column_type.pack_start(_type, True)
+    column.pack_start(title, True)
+    column1.pack_start(artist, True)
+    column2.pack_start(album,True)
+
+    column3.pack_start(year,True)
+    column4.pack_start(track_number,True)
+    column5.pack_start(genres,True)
+    column6.pack_start(time,True)
+    column7.pack_start(channel,True)
+    column8.pack_start(bitrate,True)
+    column9.pack_start(sample_rate,True)
+    column10.pack_start(encoder,True)
+
+
+    column_path.add_attribute(_path, &#34;text&#34;, 0)
+    column_type.add_attribute(_type, &#34;text&#34;, 1)
+    column1.add_attribute(artist, &#34;text&#34;, 3)
+    column2.add_attribute(album, &#34;text&#34;, 4)
+    column3.add_attribute(year, &#34;text&#34;, 5)
+    column4.add_attribute(track_number, &#34;text&#34;, 6)
+    column5.add_attribute(genres, &#34;text&#34;, 7)
+    column6.add_attribute(time, &#34;text&#34;, 8)
+    column7.add_attribute(channel, &#34;text&#34;, 9)
+    column8.add_attribute(bitrate, &#34;text&#34;, 10)
+    column9.add_attribute(sample_rate, &#34;text&#34;, 11)
+    column10.add_attribute(encoder, &#34;text&#34;, 12)
+
+
+    scrolledwindow.add(self.tree)
+    return scrolledwindow</code></pre>
+</details>
+</dd>
+<dt id="src.gtk3_gui.App.mk_store"><code class="name flex">
+<span>def <span class="ident">mk_store</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Make a store and add it to tree</p>
+<p>Gets data from backend and
+json_utils</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def mk_store(self):
+    &#34;&#34;&#34;Make a store and add it to tree\n
+    Gets data from backend and  json_utils&#34;&#34;&#34;
+    data = self.backend.db_utils.load_json()
+    store = Gtk.ListStore(str, str, str, str, str, str, str, str, str, str, str, str, str)
+    for item in data:
+        store.append([item[&#34;file_path&#34;],
+                item[&#34;file_type&#34;],
+                item[&#34;title&#34;],
+                item[&#34;artist&#34;],
+                item[&#34;album&#34;],
+                item[&#34;year&#34;],
+                item[&#34;track_num&#34;],
+                item[&#34;genres&#34;],
+                self.human_readable_time(item[&#34;length&#34;]),
+                item[&#34;channels&#34;],
+                item[&#34;bitrate&#34;],
+                item[&#34;sample_rate&#34;],
+                item[&#34;encoder&#34;],
+                ])
+    self.tree.set_model(store)</code></pre>
+</details>
+</dd>
+<dt id="src.gtk3_gui.App.mk_switch"><code class="name flex">
+<span>def <span class="ident">mk_switch</span></span>(<span>self, song_page, album_page, artist_page)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Makes GTK3 StackSwitcher and Stack then adds them to Gtk Box </p>
+<p>returns Gtk Box</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def mk_switch(self, song_page, album_page, artist_page):
+    &#34;&#34;&#34;Makes GTK3 StackSwitcher and Stack then adds them to Gtk Box \n
+    returns Gtk Box&#34;&#34;&#34;
+    vbox = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing = 5) 
+
+    #Start of switch view
+    self.switch_view = Gtk.StackSwitcher()
+    self.switch_stack = Gtk.Stack()
+    self.switch_view.set_halign(Gtk.Align.CENTER)
+
+    self.switch_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT) 
+    self.switch_stack.set_transition_duration(1000) 
+
+    self.switch_stack.add_titled(song_page, &#34;Songs&#34;, &#34;Songs&#34;)
+    self.switch_stack.add_titled(album_page, &#34;Albums&#34;, &#34;Albums&#34;)
+    self.switch_stack.add_titled(artist_page, &#34;Artists&#34;, &#34;Artists&#34;)
+
+    self.switch_stack.show()
+    self.switch_view.show()
+    
+    self.switch_view.set_stack(self.switch_stack)
+    vbox.pack_start(self.switch_view,False,True,10)
+    vbox.pack_start(self.switch_stack,False,True,10)
+    return vbox</code></pre>
+</details>
+</dd>
+<dt id="src.gtk3_gui.App.mk_title_bar"><code class="name flex">
+<span>def <span class="ident">mk_title_bar</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Makes GTK3 headerbar</p>
+<p>returns Gtk.HeaderBar</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def mk_title_bar(self):
+    &#34;&#34;&#34;Makes GTK3 headerbar\n
+    returns Gtk.HeaderBar&#34;&#34;&#34;
+    header = Gtk.HeaderBar(
+        title=&#39;Canola&#39;,
+        show_close_button=True)
+
+    self.popover = Gtk.Popover()
+    vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+    
+    db_btn = Gtk.ModelButton(label=&#34;Make DB&#34;)
+    db_btn.connect(&#34;clicked&#34;, self.on_make_db_cmd)
+
+    about_btn = Gtk.ModelButton(label=&#34;About&#34;)
+    #about_btn.connect(&#34;clicked&#34;, self.on_about)
+
+
+    vbox.pack_start(db_btn, False, True, 5)
+    vbox.pack_start(about_btn, False, True, 5)
+
+    vbox.show_all()
+    self.popover.add(vbox)
+    self.popover.set_position(Gtk.PositionType.BOTTOM)
+
+    btn = Gtk.MenuButton(popover=self.popover)
+    icon = Gio.ThemedIcon(name=&#34;preferences-system-symbolic&#34;)
+    image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+    btn.add(image)
+    header.add(btn)
+    return header</code></pre>
+</details>
+</dd>
+<dt id="src.gtk3_gui.App.on_make_db_cmd"><code class="name flex">
+<span>def <span class="ident">on_make_db_cmd</span></span>(<span>self, button)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Event handler for make database command</p>
+<p>calls inner method __update_display_and_mkdb() and start a load dialog
+NOTE: might change the dialog with a messagebox</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def on_make_db_cmd(self, button):
+    &#34;&#34;&#34;Event handler for make database command\n
+    calls inner method __update_display_and_mkdb() and start a load dialog
+    NOTE: might change the dialog with a messagebox&#34;&#34;&#34;
+    self._update_display_and_mkdb(self._get_filepath_for_open())
+    self.load_dialog = LoadDialog(self)
+    self.load_dialog.run()</code></pre>
+</details>
+</dd>
+<dt id="src.gtk3_gui.App.update_callback"><code class="name flex">
+<span>def <span class="ident">update_callback</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Callback for timer used to see when thread is done</p>
+<p>check is Thread is alive is so then adds a new timeout for a second or </p>
+<p>call mk_store to update UI then it destroys load dialog</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_callback(self):
+    &#34;&#34;&#34;Callback for timer used to see when thread is done\n
+    check is Thread is alive is so then adds a new timeout for a second or \n
+    call mk_store to update UI then it destroys load dialog&#34;&#34;&#34;
+    if self.worker_thread.is_alive():
+        GObject.timeout_add(1000,self.update_callback, self) 
+    else:
+        self.mk_store()
+        self.load_dialog.destroy() </code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="src.gtk3_gui.LoadDialog"><code class="flex name class">
+<span>class <span class="ident">LoadDialog</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>change to message box ???</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LoadDialog(Gtk.Dialog):
+    &#34;&#34;&#34;change to message box ??? &#34;&#34;&#34;
+    def __init__(self):
+        Gtk.Dialog.__init__(self, title=&#34;Making Database&#34;, flags=0)
+        self.set_default_size(250, 100)
+
+        label = Gtk.Label(label=&#34;Database is being made.&#34;)
+        box = self.get_content_area()
+        box.add(label)
+        
+        self.show_all()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>gi.overrides.Gtk.Dialog</li>
+<li>gi.repository.Gtk.Dialog</li>
+<li>gi.overrides.Gtk.Window</li>
+<li>gi.repository.Gtk.Window</li>
+<li>gi.repository.Gtk.Bin</li>
+<li>gi.overrides.Gtk.Container</li>
+<li>gi.repository.Gtk.Container</li>
+<li>gi.overrides.Gtk.Widget</li>
+<li>gi.repository.Gtk.Widget</li>
+<li>gi.repository.GObject.InitiallyUnowned</li>
+<li>gi.overrides.GObject.Object</li>
+<li>gi.repository.GObject.Object</li>
+<li>gi._gi.GObject</li>
+<li>gi.repository.Atk.ImplementorIface</li>
+<li>gi.repository.Gtk.Buildable</li>
+<li>gobject.GInterface</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src" href="index.html">src</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="src.gtk3_gui.App" href="#src.gtk3_gui.App">App</a></code></h4>
+<ul class="two-column">
+<li><code><a title="src.gtk3_gui.App.backend" href="#src.gtk3_gui.App.backend">backend</a></code></li>
+<li><code><a title="src.gtk3_gui.App.do_activate" href="#src.gtk3_gui.App.do_activate">do_activate</a></code></li>
+<li><code><a title="src.gtk3_gui.App.human_readable_time" href="#src.gtk3_gui.App.human_readable_time">human_readable_time</a></code></li>
+<li><code><a title="src.gtk3_gui.App.info_box" href="#src.gtk3_gui.App.info_box">info_box</a></code></li>
+<li><code><a title="src.gtk3_gui.App.mk_album_page" href="#src.gtk3_gui.App.mk_album_page">mk_album_page</a></code></li>
+<li><code><a title="src.gtk3_gui.App.mk_artist_page" href="#src.gtk3_gui.App.mk_artist_page">mk_artist_page</a></code></li>
+<li><code><a title="src.gtk3_gui.App.mk_song_page" href="#src.gtk3_gui.App.mk_song_page">mk_song_page</a></code></li>
+<li><code><a title="src.gtk3_gui.App.mk_store" href="#src.gtk3_gui.App.mk_store">mk_store</a></code></li>
+<li><code><a title="src.gtk3_gui.App.mk_switch" href="#src.gtk3_gui.App.mk_switch">mk_switch</a></code></li>
+<li><code><a title="src.gtk3_gui.App.mk_title_bar" href="#src.gtk3_gui.App.mk_title_bar">mk_title_bar</a></code></li>
+<li><code><a title="src.gtk3_gui.App.on_make_db_cmd" href="#src.gtk3_gui.App.on_make_db_cmd">on_make_db_cmd</a></code></li>
+<li><code><a title="src.gtk3_gui.App.popover" href="#src.gtk3_gui.App.popover">popover</a></code></li>
+<li><code><a title="src.gtk3_gui.App.switch_stack" href="#src.gtk3_gui.App.switch_stack">switch_stack</a></code></li>
+<li><code><a title="src.gtk3_gui.App.switch_view" href="#src.gtk3_gui.App.switch_view">switch_view</a></code></li>
+<li><code><a title="src.gtk3_gui.App.tree" href="#src.gtk3_gui.App.tree">tree</a></code></li>
+<li><code><a title="src.gtk3_gui.App.update_callback" href="#src.gtk3_gui.App.update_callback">update_callback</a></code></li>
+<li><code><a title="src.gtk3_gui.App.window" href="#src.gtk3_gui.App.window">window</a></code></li>
+<li><code><a title="src.gtk3_gui.App.worker_thread" href="#src.gtk3_gui.App.worker_thread">worker_thread</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="src.gtk3_gui.LoadDialog" href="#src.gtk3_gui.LoadDialog">LoadDialog</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

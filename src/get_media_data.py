@@ -13,6 +13,7 @@ class MediaData():
         """List of filepaths for files that have missing metadata """
         self.damage_files = list() # ask user if there want to delete files
         """List of filepaths for files that are damage in some way"""
+
     def find_files(self, path):
         #TODO: add a try incase a probule with file
         """Main method to get metadata from files and write data to json db\n
@@ -202,7 +203,7 @@ def remove_quotes(tag):
     """Removes quotes"""
     if tag[0] == "'" and tag[-1] == "'":
         temp = tag[:-1]
-        temp = tag[1:]
+        temp = temp[1:]
         return temp
     return tag
 

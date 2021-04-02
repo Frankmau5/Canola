@@ -4,10 +4,12 @@ import time as time_lib
 import threading
 import pathlib
 import gi
+from icecream import ic
 gi.require_version("Gtk", "3.0")
-from gi.repository import GObject, GLib, Gtk, Gio
+from gi.repository import GObject, GLib, Gtk, Gio, Gdk
 import humanize
 import get_media_data
+import recommended_artist
 
 class QuestionDialog(Gtk.Dialog):
     """A Small dialog to show a msg and getting a response (cancel/ok)"""
@@ -139,6 +141,8 @@ class EditDialog(Gtk.Dialog):
         else:
             entry = combo.get_child()
 
+# need to change names of def and var (song -> libaray, arist - > missing) etc
+
 class App(Gtk.Application):
     """Main object\n
     GTK3 UI Window"""
@@ -165,6 +169,8 @@ class App(Gtk.Application):
         """The json file data """
         self.need_to_save = False
         """Switch to see if datebase needs to be save before close"""
+        self.reco = None
+        """Recommended obj """
 
     def do_activate(self):
         """Method makes a Window, sets size of window, sets up backend and builds UI\n
@@ -175,21 +181,26 @@ class App(Gtk.Application):
         self.window.set_icon_name('mlv.knrf.canola')
         
         self.window.set_titlebar(self.mk_title_bar())
-        self.window.add(self.mk_switch(self.mk_song_page(),
-            self.mk_album_page(),
-            self.mk_artist_page()
+        self.window.add(self.mk_switch(self.mk_libary_page(),
+            self.mk_missing_page(),
+            self.mk_recommended_page()
             ))
         
         self.window.set_default_size(1080, 720)
         self.window.show_all()
         self.backend = get_media_data.MediaData()
+        self.reco = recommended_artist.Recommended(self.backend.db_utils)
         if  self.backend.db_utils.db_exist() is not True:
-            self.info_box()
+            self.info_box("Database Not Found")
         else:
             self.mk_store()
 
+        if pathlib.Path(self.reco.db_path).exists() is not True:
+            self.info_box("Recommended database is not found")
+        else: 
+            self.mk_store_recommended()
     
-    def info_box(self):
+    def info_box(self, msg):
         """Infobox that display a message\n
         Used for at start of program if no database if found"""
         dialog = Gtk.MessageDialog(
@@ -197,7 +208,7 @@ class App(Gtk.Application):
             flags=0,
             message_type=Gtk.MessageType.INFO,
             buttons=Gtk.ButtonsType.OK,
-            text="Database Not Found",
+            text=msg,
         )
         dialog.format_secondary_text(
             "Please make database."
@@ -240,6 +251,9 @@ class App(Gtk.Application):
 
         edit_btn = Gtk.ModelButton(label="Edit row(s)")
         edit_btn.connect("clicked", self.on_edit_row)
+        
+        mk_reco_btn = Gtk.ModelButton(label="Make recommended")
+        mk_reco_btn.connect("clicked", self.on_mk_reco)
 
         about_btn = Gtk.ModelButton(label="About")
         #about_btn.connect("clicked", self.on_about)
@@ -250,6 +264,7 @@ class App(Gtk.Application):
         vbox.pack_start(delete_row_btn, False, True, 5)
         vbox.pack_start(delete_file_btn, False, True, 5)
         vbox.pack_start(edit_btn, False, True, 5)
+        vbox.pack_start(mk_reco_btn, False, True, 5)
         vbox.pack_start(about_btn, False, True, 5)
 
         vbox.show_all()
@@ -263,7 +278,7 @@ class App(Gtk.Application):
         header.add(btn)
         return header
 
-    def mk_switch(self, song_page, album_page, artist_page):
+    def mk_switch(self, library_page, missing_page, recommended_page):
         """Makes GTK3 StackSwitcher and Stack then adds them to Gtk Box \n
         returns Gtk Box"""
         vbox = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing = 5) 
@@ -276,9 +291,9 @@ class App(Gtk.Application):
         self.switch_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT) 
         self.switch_stack.set_transition_duration(1000) 
 
-        self.switch_stack.add_titled(song_page, "Songs", "Songs")
-        self.switch_stack.add_titled(album_page, "Albums", "Albums")
-        self.switch_stack.add_titled(artist_page, "Artists", "Artists")
+        self.switch_stack.add_titled(library_page, "Library", "Library")
+        self.switch_stack.add_titled(missing_page, "Missing", "Missing")
+        self.switch_stack.add_titled(recommended_page, "Recommended", "Recommended")
 
         self.switch_stack.show()
         self.switch_view.show()
@@ -288,8 +303,8 @@ class App(Gtk.Application):
         vbox.pack_start(self.switch_stack,False,True,10)
         return vbox
 
-    def mk_song_page(self):
-        """Makes UI for songs page on the stackswitcher\n
+    def mk_libary_page(self):
+        """Makes UI for songs/library page on the stackswitcher\n
         returns GTK ScrolledWindow"""
         scrolledwindow = Gtk.ScrolledWindow()
         scrolledwindow.set_hexpand(True)
@@ -297,6 +312,7 @@ class App(Gtk.Application):
         
         store = Gtk.ListStore()
         self.tree = Gtk.TreeView(model=store)
+        self.tree.connect("button-press-event", self.on_button_press_event)
         self.selector = self.tree.get_selection()
         self.selector.set_mode(Gtk.SelectionMode.MULTIPLE)
 
@@ -411,7 +427,7 @@ class App(Gtk.Application):
         scrolledwindow.add(self.tree)
         return scrolledwindow
 
-    def mk_album_page(self):
+    def mk_missing_page(self):
         """Makes UI for album page on the stackswitcher\n
         returns GTK ScrolledWindow"""
         scrolledwindow = Gtk.ScrolledWindow()
@@ -419,21 +435,52 @@ class App(Gtk.Application):
         scrolledwindow.set_vexpand(True)
         return scrolledwindow
 
-    def mk_artist_page(self):
+    def mk_recommended_page(self):
         """Makes UI for album page on the stackswitcher\n
         returns GTK ScrolledWindow"""
 
         scrolledwindow = Gtk.ScrolledWindow()
         scrolledwindow.set_hexpand(True)
         scrolledwindow.set_vexpand(True)
+        
+        store = Gtk.ListStore()
+        self.tree_reco = Gtk.TreeView(model=store)
+        #self.tree_reco.connect("button-press-event", self.on_button_press_event)
+        self.selector = self.tree_reco.get_selection()
+        self.selector.set_mode(Gtk.SelectionMode.MULTIPLE)
+
+        column_type = Gtk.TreeViewColumn("Artist")
+        column_type.set_resizable(True)
+        self.tree_reco.append_column(column_type)
+        column_type.set_sort_column_id(1) 
+
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn("Recommended Artist", renderer, text=1)
+        column.set_resizable(True)
+        self.tree_reco.append_column(column)
+        column.set_sort_column_id(1)  
+
+        artist = Gtk.CellRendererText()
+        reco_artist = Gtk.CellRendererText()
+  
+
+        column_type.pack_start(artist, True)
+        column.pack_start(reco_artist, True)
+        
+        column_type.add_attribute(artist, "text", 0)
+        column.add_attribute(reco_artist, "text", 1)
+
+        scrolledwindow.add(self.tree_reco)
+
         return scrolledwindow
 
     def mk_store(self):
         """Make a store and add it to tree\n
         Gets data from backend and  json_utils"""
-        if self.database == None:
+        if self.database == None or len(self.database) < 1:
             self.database = self.backend.db_utils.load_json()
         store = Gtk.ListStore(str, str, str, str, str, str, str, str, str, str, str, str, str)
+        
         for item in self.database:
             store.append([
                     item["file_type"],
@@ -452,6 +499,48 @@ class App(Gtk.Application):
                     ])
         store.set_sort_func(1, self.compare, None)
         self.tree.set_model(Gtk.TreeModelSort(model=store))
+
+    def mk_store_recommended(self):
+        db = self.reco.load_db()
+        if db is not None:
+            store = Gtk.ListStore(str, str)
+            for item_dict in db:
+                for key in item_dict:
+                    s = ""
+                    for item in item_dict[key]:
+                        s = s + item + ",   "
+                    store.append([key, str(s)])
+            store.set_sort_func(1, self.compare, None)
+            self.tree_reco.set_model(Gtk.TreeModelSort(model=store))  
+        else:
+            pass # Error file not found
+
+    def mk_right_menu(self):
+        menu = Gtk.Menu()
+        
+        menu_item_1 = Gtk.MenuItem("Make Database")
+        menu_item_1.connect("activate", self.on_make_db_cmd)
+        
+        menu_item_2 = Gtk.MenuItem("Delete Database")
+        menu_item_2.connect("activate", self.on_delete_db) 
+
+        menu_item_3 = Gtk.MenuItem("Delete row(s)")
+        menu_item_3.connect("activate", self.on_row_delete) 
+
+        menu_item_4 = Gtk.MenuItem("Delete files(s)")
+        menu_item_4.connect("activate", self.on_file_delete) 
+
+        menu_item_5 = Gtk.MenuItem("Edit row(s)")
+        menu_item_5.connect("activate", self.on_edit_row) 
+
+        menu.append(menu_item_1)
+        menu.append(menu_item_2)
+        menu.append(menu_item_3)
+        menu.append(menu_item_4)
+        menu.append(menu_item_5)
+        
+        menu.show_all()
+        return menu
 
     def on_edit_row(self, button):
         """Get data needed to make an Editdialog and displays it """
@@ -582,6 +671,17 @@ class App(Gtk.Application):
     def on_file_delete(self, button):
         self.on_row_delete(True)
 
+    def on_mk_reco(self,widget):
+        artist_list = list()
+        for row in self.database:
+            artist_list.append(row["artist"])
+        artist_list = list(set(artist_list))
+        artist_list.sort()
+
+        #Thread needed maybe 
+        self.reco.mk_reco_datebase(artist_list)
+        self.mk_store_recommended()
+
     def _delete_database(self):
         try:
            pathlib.Path(self.backend.db_utils.db_filepath).unlink()
@@ -589,6 +689,13 @@ class App(Gtk.Application):
            self.mk_store()
         except FileNotFoundError as file_error:
             print("Error")
+
+    def on_button_press_event(self, widget, event):
+        # Check if right mouse button was preseed
+        if event.type == Gdk.EventType.BUTTON_PRESS and event.button == 3:
+            m = self.mk_right_menu()
+            m.popup(None, None, None, None ,event.button, event.time)
+            return True 
 
     def _get_filepath_for_open(self):
         """Dispay Gtk.FileChooserDialog and get filepath\n
