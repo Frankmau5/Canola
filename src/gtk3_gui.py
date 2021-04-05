@@ -171,7 +171,8 @@ class App(Gtk.Application):
         """Switch to see if datebase needs to be save before close"""
         self.reco = None
         """Recommended obj """
-
+        self.reco_main_menu_selc = None
+        """Keep track of what menu item is selceted in the recommened right click menu """
     def do_activate(self):
         """Method makes a Window, sets size of window, sets up backend and builds UI\n
         After setting up backend this object will display a messagebox if no database is found or will load database\n
@@ -445,7 +446,7 @@ class App(Gtk.Application):
         
         store = Gtk.ListStore()
         self.tree_reco = Gtk.TreeView(model=store)
-        #self.tree_reco.connect("button-press-event", self.on_button_press_event)
+        self.tree_reco.connect("button-press-event", self.on_right_click_reco_page)
         self.selector = self.tree_reco.get_selection()
         self.selector.set_mode(Gtk.SelectionMode.MULTIPLE)
 
@@ -501,17 +502,26 @@ class App(Gtk.Application):
         self.tree.set_model(Gtk.TreeModelSort(model=store))
 
     def mk_store_recommended(self):
+        skip = False
         db = self.reco.load_db()
         if db is not None:
             store = Gtk.ListStore(str, str)
             for item_dict in db:
                 for key in item_dict:
-                    s = ""
-                    for item in item_dict[key]:
-                        s = s + item + ",   "
-                    store.append([key, str(s)])
+                    skip = False
+                    json_list = ""
+                    with open(self.backend.db_utils.hide_reco_path) as f_open:
+                        json_list = self.backend.db_utils.load_json_with_fopen(f_open)
+                    for item in json_list:
+                        if item["hide"] == key:
+                            skip = True
+                    if skip == False:
+                        s = ""
+                        for item in item_dict[key]:
+                            s = s + item + ",   "
+                        store.append([key, str(s)])
             store.set_sort_func(1, self.compare, None)
-            self.tree_reco.set_model(Gtk.TreeModelSort(model=store))  
+            self.tree_reco.set_model(Gtk.TreeModelSort(model=store))
         else:
             pass # Error file not found
 
@@ -541,6 +551,73 @@ class App(Gtk.Application):
         
         menu.show_all()
         return menu
+
+    def mk_right_menu_reco(self):
+        menu = Gtk.Menu()
+
+        menu_item_hide = Gtk.MenuItem("Hide")
+        menu_item_hide.connect("activate", self.on_change_reco_menu)
+        menu_item_1 = Gtk.MenuItem("Find on Youtube")
+        menu_item_1.connect("activate", self.on_change_reco_menu)
+        menu_item_2 = Gtk.MenuItem("wikipedia")
+        menu_item_2.connect("activate", self.on_change_reco_menu)
+        menu_item_3 = Gtk.MenuItem("Buy CD")
+        menu_item_3.connect("activate", self.on_change_reco_menu)
+
+        menu.append(menu_item_hide)
+        menu.append(menu_item_1)
+        menu.append(menu_item_2)
+        menu.append(menu_item_3)
+
+        sub_menu = Gtk.Menu()
+        tree_selc = self.tree_reco.get_selection()
+        (model,pathlist) = tree_selc.get_selected_rows()
+        for path in pathlist:
+            text_iter = model.get_iter(path)
+            reco_artist = list(model.get_value(text_iter,1).replace("   ","").split(","))
+            for ra in reco_artist:
+                if ra == "":
+                    continue
+                menu_item = Gtk.MenuItem(ra)
+                menu_item.connect("activate", self.on_sub_menu_click)
+
+                sub_menu.append(menu_item)
+        
+        menu_item_1.set_submenu(sub_menu)
+        menu_item_2.set_submenu(sub_menu)
+        menu_item_3.set_submenu(sub_menu)
+
+        
+        menu.show_all()
+        return menu
+
+    def on_change_reco_menu(self, widget):
+        name = widget.get_label()
+        self.reco_main_menu_selc = name
+        art_name = ""
+        if name == "Hide":
+            tree_selc = self.tree_reco.get_selection()
+            (model,pathlist) = tree_selc.get_selected_rows()
+            for path in pathlist:
+                text_iter = model.get_iter(path)
+                art_name = model.get_value(text_iter,0)
+            
+            d = dict()
+            d["hide"] = art_name
+            l = list()
+            l.append(d)
+            self.backend.db_utils.write_hide_reco_db(l)
+
+    def on_sub_menu_click(self, widget):
+        artist_name = widget.get_label()
+        #TODO: ADD new obj for web base stuff and call the right method here
+        if self.reco_main_menu_selc == "Find on Youtube":
+            pass
+        if self.reco_main_menu_selc == "wikipedia":
+            pass
+        if self.reco_main_menu_selc == "Buy CD":
+            pass
+
 
     def on_edit_row(self, button):
         """Get data needed to make an Editdialog and displays it """
@@ -696,6 +773,13 @@ class App(Gtk.Application):
             m = self.mk_right_menu()
             m.popup(None, None, None, None ,event.button, event.time)
             return True 
+
+
+    def on_right_click_reco_page(self, widget, event):
+        if event.type == Gdk.EventType.BUTTON_PRESS and event.button == 3:
+            m = self.mk_right_menu_reco()
+            m.popup(None, None, None, None ,event.button, event.time)
+            return True
 
     def _get_filepath_for_open(self):
         """Dispay Gtk.FileChooserDialog and get filepath\n

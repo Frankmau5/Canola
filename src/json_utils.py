@@ -2,7 +2,7 @@
 from platform import system
 import pathlib
 import simplejson
-
+from icecream import ic
 
 def db_path():
     """function to set path for the canola_db json file for windows or liunx"""
@@ -23,6 +23,7 @@ class JsonUtils():
         """Var with json file path \n
         type = pathlib.Path"""
         self.json = simplejson
+        self.hide_reco_path = pathlib.Path("/home/knrf/.canola_hide.json")
 
 # get_media_data
     def db_exist(self):
@@ -64,6 +65,22 @@ class JsonUtils():
             f_open.close()
         with open(reco_path, mode='w') as f_open:
             f_open.write(data)
+
+    def write_hide_reco_db(self, db_dict):
+        if self.hide_reco_path.exists():
+            with open(self.hide_reco_path) as f_open:
+                json = self.load_json_with_fopen(f_open)
+                #error here json error with adding list together
+                for item in json:
+                    db_dict.append(item)
+            
+            with open(self.hide_reco_path, mode="w") as f_open:
+                data = self.json.dumps(db_dict)
+                f_open.write(data)
+        else:
+            data = self.json.dumps(db_dict)
+            with open(self.hide_reco_path, mode='w') as f_open:
+                f_open.write(data)
 
 
 
